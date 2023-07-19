@@ -1,14 +1,16 @@
-const express = require("express")
-const rotas = express.Router()
-const jogoControllers= require("../controllers/jogoControllers")
+const express = require('express');
+const router = express.Router();
 
-rotas.get("/lista", jogoControllers.exibeTodos)
-rotas.get("/id/:id", jogoControllers.exibePorId)
-rotas.get("/jogo/:id", jogoControllers.exibeCategoria)
-rotas.get("/jogo/:id", jogoControllers.exibeNome)
+const jogoController = require('../controllers/jogoController');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-rotas.post("/criar", jogoControllers.criaCadastro)
-rotas.patch("/alterar/:id", jogoControllers.alteraCadastro)
-rotas.delete("/deletar/:id", jogoControllers.deletaCadastro)
+// Rotas públicas
+router.get('/jogos', jogoController.getAllJogos);
+router.post('/jogos', jogoController.createJogo);
+router.put('/jogos/:id', jogoController.updateJogo);
+router.delete('/jogos/:id', jogoController.deleteJogo);
 
-module.exports=rotas
+// Rota privada que requer autenticação
+router.get('/jogos/:id', authMiddleware.authenticate, jogoController.getJogoById);
+
+module.exports = router;
