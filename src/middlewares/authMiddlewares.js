@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 
-exports.authenticate = (req, res, next) => {
+exports.checkAuth = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ message: 'Sem autorização' });
